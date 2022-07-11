@@ -13,24 +13,34 @@ startLoading();
 
 function onTextInput(e) {
   formData[e.target.name] = e.target.value;
-  console.log(formData);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 }
 
 function onFormSubmit(e) {
   e.preventDefault();
-  form.reset();
-  console.log(localStorage.getItem(STORAGE_KEY));
-  localStorage.removeItem(STORAGE_KEY);
+  if (!formData[input.name] || !formData[textarea.name]) {
+    window.alert('Для отправки формы заполните все поля!');
+    // console.log('Все поля не были заполнены!');
+  } else {
+    form.reset();
+    console.log(localStorage.getItem(STORAGE_KEY));
+    localStorage.removeItem(STORAGE_KEY);
+  }
 }
 
 function startLoading() {
-  const savedMessage = JSON.parse(localStorage.getItem(STORAGE_KEY));
-  if (savedMessage) {
-    input.value = savedMessage.email;
-    textarea.value = savedMessage.message;
-  } else {
-    input.value = '';
-    textarea.value = '';
+  const savedData = localStorage.getItem(STORAGE_KEY);
+  const savedMessage = JSON.parse(savedData);
+
+  if (savedData) {
+    if (savedMessage.email) {
+      input.value = savedMessage.email;
+      formData[input.name] = savedMessage.email;
+    }
+
+    if (savedMessage.message) {
+      textarea.value = savedMessage.message;
+      formData[textarea.name] = savedMessage.message;
+    }
   }
 }

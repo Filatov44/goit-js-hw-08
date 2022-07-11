@@ -9,16 +9,19 @@ const iframe = document.querySelector('#vimeo-player');
 const player = new Player(iframe);
 
 //Время воспроизведения (ключь)
-const timePlay = "videoplayer-current-time";
+const timePlay = 'videoplayer-current-time';
+
+//Сохраненное время
+const savedTime = localStorage.getItem(timePlay) || 0;
 
 //Метод on
 
-const onPlay = function(data) {
-	localStorage.setItem(timePlay, data.seconds);
+const onPlay = function (data) {
+  localStorage.setItem(timePlay, data.seconds);
 };
 
-player.on("timeupdate", throttle(onPlay, 1000));
+player.on('timeupdate', throttle(onPlay, 1000));
 
 //Используем метод setCurrentTime() при перезагрузке страницы
 
-addEventListener("DOMContentLoaded", player.setCurrentTime(localStorage.getItem(timePlay)));
+addEventListener('DOMContentLoaded', player.setCurrentTime(savedTime));
